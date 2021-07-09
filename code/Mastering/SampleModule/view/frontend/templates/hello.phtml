@@ -1,0 +1,8 @@
+<?php 
+/** @var \Mastering\SampleModule\Block\Hello $block */
+?>
+<?php foreach($block->getItems() as $item): ?>
+<div>
+	<p><?php echo $item->getName(); ?>: <?php echo $item->getDescription(); ?></p>
+</div>
+<?php endforeach; ?>
