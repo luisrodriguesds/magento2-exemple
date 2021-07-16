@@ -15,9 +15,9 @@ class Index extends Action {
 		// $result = $this->ResultFactory->create(ResultFactory::TYPE_RAW);
 		// $result->setContent('Hello world');
 		// return $result;
-		// echo "Hello world";
-		// exit;
+		echo "Hello world";
+		exit;
 
-		return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+		// return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 	}
 }

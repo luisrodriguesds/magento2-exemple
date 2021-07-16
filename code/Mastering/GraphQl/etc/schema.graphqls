@@ -1,0 +1,10 @@
+type Query {
+    searchcustomer(email: String): Searchcustomer @resolver(class: "Mastering\\GraphQl\\Model\\Resolver\\Customer")
+}
+
+type Searchcustomer {
+    entity_id: Int
+    firstname: String
+    lastname: String
+    email: String
+}
