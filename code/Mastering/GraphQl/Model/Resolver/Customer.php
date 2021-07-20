@@ -99,22 +99,23 @@ class Customer implements ResolverInterface {
 
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)  {
-        if (!isset($args['email'])) {
-            throw new GraphQlAuthorizationException(
-                __(
-                    'email for customer should be specified',
-                    [\Magento\Customer\Model\Customer::ENTITY]
-                )
-            );
-        }
+        // if (!isset($args['email'])) {
+        //     throw new GraphQlAuthorizationException(
+        //         __(
+        //             'email for customer should be specified',
+        //             [\Magento\Customer\Model\Customer::ENTITY]
+        //         )
+        //     );
+        // }
 
         try {
-            // Get the data from customer table
-            $data = $this->getCustomerData($args['email']);
+            $data = [];
+            if (isset($args['email'])) {
+                $data = $this->getCustomerData($args['email']);
+            } else {
+                $data = $this->getAllCustomerData();
+            }
 
-            // degub here
-            // $this->logger->debug('Teste array', $data);
-            
             // Return of gpq api
             $result = function () use ($data) {
                 return !empty($data) ? $data : [];
@@ -145,11 +146,30 @@ class Customer implements ResolverInterface {
             foreach ($customerColl as $customer) {
                 array_push($customerData, $customer->getData());
             }
-            return isset($customerData[0]) ? $customerData[0] : [];
+            $finalReturn['customers'] = $customerData;
+            // var_dump($finalReturn);
+            return isset($customerData[0]) ? $finalReturn : [];
         } catch (NoSuchEntityException $e) {
             return [];
         } catch (LocalizedException $e) {
             throw new NoSuchEntityException(__($e->getMessage()));
         }
+    }
+
+    private function getAllCustomerData(): array {
+        try {
+            $customersData = [];
+            $customersColl = $this->customerFactory->create()->getCollection()->getItems();
+            foreach ($customersColl as $customers) {
+                array_push($customersData, $customers->getData());
+            }
+            $finalReturn['customers'] = $customersData;
+            return count($customersData) > 0 ? $finalReturn : [];
+        } catch (NoSuchEntityException $e) {
+            return [];
+        } catch (LocalizedException $e) {
+            throw new NoSuchEntityException(__($e->getMessage()));
+        }
+        return [];
     }
 }
