@@ -1,0 +1,27 @@
+scalar Void
+
+type Query {
+    getSampleItems(id: Int, name: String): [Item] @resolver(class: "Mastering\\SampleModule\\Model\\Resolver\\ItemResolver")
+}
+
+type Mutation {
+    insertSampleItem(
+        name: String,
+        description: String
+    ): Item @resolver(class: "Mastering\\SampleModule\\Model\\Resolver\\ItemResolver")
+
+    deleteSampleItem(id: Int): Boolean @resolver(class: "Mastering\\SampleModule\\Model\\Resolver\\ItemResolver")
+
+    updateSampleItem(id: Int, input: ItemInput): Item @resolver(class: "Mastering\\SampleModule\\Model\\Resolver\\ItemResolver")
+}
+
+input ItemInput {
+    name: String
+    description: String
+}
+
+type Item {
+    id: Int
+    name: String
+    description: String
+}
